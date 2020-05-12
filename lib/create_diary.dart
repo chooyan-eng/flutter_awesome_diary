@@ -88,71 +88,73 @@ class _CreateDiaryState extends State<CreateDiary> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text('日記を書く'),
-            const SizedBox(height: 32),
-            Text(
-              'タイトル',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            TextField(
-              controller: _titleEditController,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              '本文',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            TextField(
-              controller: _bodyEditController,
-              maxLines: 10,
-            ),
-            const SizedBox(height: 32),
-            Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width / 2,
-                child: _imageFile == null ? SizedBox.shrink() : Image.file(_imageFile),
-              ),
-            ),
-            const SizedBox(height: 8),
-            InkWell(
-              onTap: _pickupImage,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('画像を選択する'),
-                    const SizedBox(width: 16),
-                    Icon(Icons.photo_library),
-                  ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text('日記を書く'),
+              const SizedBox(height: 32),
+              Text(
+                'タイトル',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-            const SizedBox(height: 32),
-            Center(
-              child: RaisedButton(
-                child: Text('保存'),
-                onPressed: () {
-                  if (widget.baseDiary == null) {
-                    _save(context);
-                  } else {
-                    _update(context);
-                  }
-                },
+              const SizedBox(height: 4),
+              TextField(
+                controller: _titleEditController,
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+              Text(
+                '本文',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 4),
+              TextField(
+                controller: _bodyEditController,
+                maxLines: 10,
+              ),
+              const SizedBox(height: 32),
+              Center(
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: _imageFile == null ? SizedBox.shrink() : Image.file(_imageFile),
+                ),
+              ),
+              const SizedBox(height: 8),
+              InkWell(
+                onTap: _pickupImage,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('画像を選択する'),
+                      const SizedBox(width: 16),
+                      Icon(Icons.photo_library),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32),
+              Center(
+                child: RaisedButton(
+                  child: Text('保存'),
+                  onPressed: () {
+                    if (widget.baseDiary == null) {
+                      _save(context);
+                    } else {
+                      _update(context);
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

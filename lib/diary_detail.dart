@@ -28,25 +28,27 @@ class DiaryDetail extends StatelessWidget {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              diary.title,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                diary.title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Text(diary.body),
-            const SizedBox(height: 16),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              child: diary.imageFile == null ? SizedBox.shrink() : Image.file(diary.imageFile),
-            ),
-          ],
+              const SizedBox(height: 16),
+              Text(diary.body),
+              const SizedBox(height: 16),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                child: diary.imageFile == null ? SizedBox.shrink() : Image.file(diary.imageFile),
+              ),
+            ],
+          ),
         ),
       ),
     );
