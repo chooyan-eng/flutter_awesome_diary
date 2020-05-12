@@ -26,6 +26,11 @@ class DiaryDetail extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(diary.body),
+            const SizedBox(height: 16),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              child: diary.imageFile == null ? SizedBox.shrink() : Image.file(diary.imageFile),
+            ),
           ],
         ),
       ),

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:awesome_diary/diary_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:toast/toast.dart';
 
 class CreateDiary extends StatefulWidget {
@@ -20,12 +23,23 @@ class _CreateDiaryState extends State<CreateDiary> {
   final _titleEditController = TextEditingController();
   final _bodyEditController = TextEditingController();
 
+  File _imageFile;
+
+  Future<void> _pickupImage() async {
+    final pickupImageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _imageFile = pickupImageFile;
+    });
+  }
+
   Future<void> _save(BuildContext context) async {
     final provider = DiaryProvider();
     await provider.open();
     final insertedDiary = await provider.insert(Diary(
       title: _titleEditController.text,
       body: _bodyEditController.text,
+      imageFile: _imageFile,
       createdAt: DateTime.now(),
     ));
     await provider.close();
@@ -45,6 +59,7 @@ class _CreateDiaryState extends State<CreateDiary> {
       id: widget.baseDiary.id,
       title: _titleEditController.text,
       body: _bodyEditController.text,
+      imageFile: _imageFile,
       createdAt: widget.baseDiary.createdAt,
     ));
     await provider.close();
@@ -62,6 +77,9 @@ class _CreateDiaryState extends State<CreateDiary> {
     if (widget.baseDiary != null) {
       _titleEditController.text = widget.baseDiary.title;
       _bodyEditController.text = widget.baseDiary.body;
+      setState(() {
+        _imageFile = widget.baseDiary.imageFile;
+      });
     }
     super.initState();
   }
@@ -98,6 +116,28 @@ class _CreateDiaryState extends State<CreateDiary> {
             TextField(
               controller: _bodyEditController,
               maxLines: 10,
+            ),
+            const SizedBox(height: 32),
+            Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width / 2,
+                child: _imageFile == null ? SizedBox.shrink() : Image.file(_imageFile),
+              ),
+            ),
+            const SizedBox(height: 8),
+            InkWell(
+              onTap: _pickupImage,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('画像を選択する'),
+                    const SizedBox(width: 16),
+                    Icon(Icons.photo_library),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: 32),
             Center(

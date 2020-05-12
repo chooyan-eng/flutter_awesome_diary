@@ -1,21 +1,26 @@
+import 'dart:io';
+
 import 'package:sqflite/sqflite.dart';
 
 final String tableDiary = 'diary';
 final String columnId = '_id';
 final String columnTitle = 'title';
 final String columnBody = 'body';
+final String columnImageFile = 'image_file';
 final String columnCreatedAt = 'created_at';
 
 class Diary {
   int id;
   final String title;
   final String body;
+  final File imageFile;
   final DateTime createdAt;
 
   Diary({
     this.id,
     this.title,
     this.body,
+    this.imageFile,
     this.createdAt,
   });
 
@@ -23,6 +28,7 @@ class Diary {
     var map = <String, dynamic>{
       columnTitle: title,
       columnBody: body,
+      columnImageFile: imageFile.path,
       columnCreatedAt: createdAt.millisecondsSinceEpoch,
     };
     if (id != null) {
@@ -36,6 +42,7 @@ class Diary {
       id: map[columnId],
       title: map[columnTitle],
       body: map[columnBody],
+      imageFile: File(map[columnImageFile]),
       createdAt: DateTime.fromMillisecondsSinceEpoch(map[columnCreatedAt]),
     );
   }
@@ -45,6 +52,7 @@ class Diary {
       id: -1,
       title: 'Flutterはじめました',
       body: 'TechPitでFlutterの勉強をスタートしました。まずは宣言的UIから勉強中。',
+      imageFile: null,
       createdAt: DateTime.now(),
     );
   }
@@ -64,6 +72,7 @@ class DiaryProvider {
               $columnId integer primary key autoincrement, 
               $columnTitle text not null,
               $columnBody text not null,
+              $columnImageFile text,
               $columnCreatedAt integer not null
             )
           ''',
@@ -84,6 +93,7 @@ class DiaryProvider {
         columnId,
         columnTitle,
         columnBody,
+        columnImageFile,
         columnCreatedAt,
       ],
       where: '$columnId = ?',
@@ -102,6 +112,7 @@ class DiaryProvider {
         columnId,
         columnTitle,
         columnBody,
+        columnImageFile,
         columnCreatedAt,
       ],
     );
