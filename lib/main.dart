@@ -1,3 +1,5 @@
+import 'package:awesome_diary/diary.dart';
+import 'package:awesome_diary/diary_list_item.dart';
 import 'package:awesome_diary/stateful_widget_page.dart';
 import 'package:awesome_diary/stateless_widget_page.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,9 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(),
-        body: StatefulWidgetPage(),
+        body: DiaryListItem(
+          diary: Diary.sample(),
+        ),
       ),
     );
   }
