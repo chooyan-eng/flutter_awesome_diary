@@ -31,6 +31,16 @@ class _DiaryListState extends State<DiaryList> {
     });
   }
 
+  Future<void> _edit(Diary diary) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CreateDiary(
+        baseDiary: diary,
+      )),
+    );
+    await _updateList();
+  }
+
   Future<void> _delete(Diary diary) async {
     final provider = DiaryProvider();
     await provider.open();
@@ -53,11 +63,12 @@ class _DiaryListState extends State<DiaryList> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: InkWell(
-              onTap: () {
-                Navigator.push(
+              onTap: () async {
+                await Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => CreateDiary()),
                 );
+                await _updateList();
               },
               child: Icon(Icons.add),
             ),
@@ -76,7 +87,10 @@ class _DiaryListState extends State<DiaryList> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pop(context);
+                        _edit(_diaryList[index]);
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -89,7 +103,10 @@ class _DiaryListState extends State<DiaryList> {
                       ),
                     ),
                     InkWell(
-                      onTap: () => _delete(_diaryList[index]),
+                      onTap: () {
+                        Navigator.pop(context);
+                        _delete(_diaryList[index]);
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
