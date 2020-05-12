@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: DiaryDetail(diary: Diary.sample()),
+      home: DiaryList(),
     );
   }
 }
