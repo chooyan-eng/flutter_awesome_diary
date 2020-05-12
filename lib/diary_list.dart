@@ -18,8 +18,13 @@ class _DiaryListState extends State<DiaryList> {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: _diaryList.length,
-      itemBuilder: (context, index) => DiaryListItem(
-        diary: _diaryList[index],
+      itemBuilder: (context, index) => InkWell(
+        onTap: () {
+          
+        },
+        child: DiaryListItem(
+          diary: _diaryList[index],
+        ),
       ),
     );
   }
