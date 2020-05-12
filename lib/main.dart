@@ -1,4 +1,5 @@
 import 'package:awesome_diary/diary.dart';
+import 'package:awesome_diary/diary_list.dart';
 import 'package:awesome_diary/diary_list_item.dart';
 import 'package:awesome_diary/stateful_widget_page.dart';
 import 'package:awesome_diary/stateless_widget_page.dart';
@@ -19,9 +20,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(),
-        body: DiaryListItem(
-          diary: Diary.sample(),
-        ),
+        body: DiaryList(),
       ),
     );
   }
