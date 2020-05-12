@@ -15,6 +15,7 @@ class CreateDiary extends StatelessWidget {
       body: _bodyEditController.text,
       createdAt: DateTime.now(),
     ));
+    await provider.close();
 
     if (insertedDiary.id != null) {
       Toast.show('日記を保存しました', context);

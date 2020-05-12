@@ -10,11 +10,21 @@ class DiaryList extends StatefulWidget {
 }
 
 class _DiaryListState extends State<DiaryList> {
-  final _diaryList = <Diary>[
-    Diary.sample(),
-    Diary.sample(),
-    Diary.sample(),
-  ];
+  final _diaryList = [];
+
+  @override
+  void initState() {
+    final provider = DiaryProvider();
+    
+    provider.open().then((_) async {
+      final savedDiaryList = await provider.getAll();
+      setState(() {
+        _diaryList.addAll(savedDiaryList);
+      });
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
