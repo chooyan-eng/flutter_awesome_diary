@@ -1,4 +1,4 @@
-import 'package:awesome_diary/diary.dart';
+import 'package:awesome_diary/diary_provider.dart';
 import 'package:flutter/material.dart';
 
 class DiaryDetail extends StatelessWidget {
