@@ -53,9 +53,9 @@ class Diary {
 class DiaryProvider {
   Database db;
 
-  Future open(String path) async {
+  Future open() async {
     db = await openDatabase(
-      path,
+      'awesome_diary',
       version: 1,
       onCreate: (Database db, int version) async {
         await db.execute(
@@ -64,7 +64,7 @@ class DiaryProvider {
               $columnId integer primary key autoincrement, 
               $columnTitle text not null,
               $columnBody text not null,
-              $columnCreatedAt integer not null,
+              $columnCreatedAt integer not null
             )
           ''',
         );
