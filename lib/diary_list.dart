@@ -61,21 +61,6 @@ class _DiaryListState extends State<DiaryList> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('日記一覧'),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: InkWell(
-              onTap: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CreateDiary()),
-                );
-                await _updateList();
-              },
-              child: Icon(Icons.add),
-            ),
-          ),
-        ],
       ),
       body: ListView.builder(
         itemCount: _diaryList.length,
@@ -137,6 +122,16 @@ class _DiaryListState extends State<DiaryList> {
           },
           diary: _diaryList[index],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateDiary()),
+          );
+          await _updateList();
+        },
+        child: Icon(Icons.add),
       ),
     );
   }

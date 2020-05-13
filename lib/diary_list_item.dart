@@ -44,13 +44,14 @@ class DiaryListItem extends StatelessWidget {
                   diary.title,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 32,
+                    fontSize: 28,
                   ),
                 ),
                 SizedBox(height: 8),
                 Text(
                   diary.body,
                   overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
                 SizedBox(height: 8),
                 Align(

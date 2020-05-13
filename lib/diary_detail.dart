@@ -40,7 +40,7 @@ class DiaryDetail extends StatelessWidget {
                   diary.title,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 32,
+                    fontSize: 28,
                   ),
                 ),
               ),
@@ -66,7 +66,7 @@ class DiaryDetail extends StatelessWidget {
                 child: Text(
                   diary.body,
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 18,
                   ),
                 ),
               ),
