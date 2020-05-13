@@ -30,23 +30,47 @@ class DiaryDetail extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                diary.title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  diary.title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 32,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
-              Text(diary.body),
-              const SizedBox(height: 16),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                child: diary.imageFile == null ? SizedBox.shrink() : Image.file(diary.imageFile),
+              Hero(
+                tag: 'helo_${diary.id}',
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: diary.imageFile == null ? SizedBox.shrink() : Image.file(diary.imageFile),
+                ),
               ),
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Align(
+                  child: Text(diary.createdAt.toString()),
+                  alignment: Alignment.centerRight,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  diary.body,
+                  style: TextStyle(
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32),
             ],
           ),
         ),

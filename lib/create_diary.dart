@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:awesome_diary/diary_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:toast/toast.dart';
 
 class CreateDiary extends StatefulWidget {
-
   final Diary baseDiary;
 
   CreateDiary({
@@ -19,17 +19,23 @@ class CreateDiary extends StatefulWidget {
 }
 
 class _CreateDiaryState extends State<CreateDiary> {
-
   final _titleEditController = TextEditingController();
   final _bodyEditController = TextEditingController();
 
   File _imageFile;
+  var _errorMessage = '';
 
   Future<void> _pickupImage() async {
-    final pickupImageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    final pickupImageFile =
+        await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    final directory = await getApplicationDocumentsDirectory();
+    final fileName = 'diary_${DateTime.now().millisecondsSinceEpoch}';
+    final file = File('${directory.path}/$fileName');
+    file.writeAsBytesSync(pickupImageFile.readAsBytesSync());
 
     setState(() {
-      _imageFile = pickupImageFile;
+      _imageFile = file;
     });
   }
 
@@ -87,15 +93,23 @@ class _CreateDiaryState extends State<CreateDiary> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('日記を書く'),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('日記を書く'),
-              const SizedBox(height: 32),
+              Offstage(
+                offstage: _errorMessage.isEmpty,
+                child: Text(
+                  _errorMessage,
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              SizedBox(height: 8),
               Text(
                 'タイトル',
                 style: TextStyle(
@@ -105,6 +119,9 @@ class _CreateDiaryState extends State<CreateDiary> {
               const SizedBox(height: 4),
               TextField(
                 controller: _titleEditController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                ),
               ),
               const SizedBox(height: 16),
               Text(
@@ -117,12 +134,17 @@ class _CreateDiaryState extends State<CreateDiary> {
               TextField(
                 controller: _bodyEditController,
                 maxLines: 10,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                ),
               ),
               const SizedBox(height: 32),
               Center(
                 child: Container(
                   width: MediaQuery.of(context).size.width / 2,
-                  child: _imageFile == null ? SizedBox.shrink() : Image.file(_imageFile),
+                  child: _imageFile == null
+                      ? SizedBox.shrink()
+                      : Image.file(_imageFile),
                 ),
               ),
               const SizedBox(height: 8),
@@ -141,20 +163,50 @@ class _CreateDiaryState extends State<CreateDiary> {
                 ),
               ),
               const SizedBox(height: 32),
-              Center(
-                child: RaisedButton(
-                  child: Text('保存'),
-                  onPressed: () {
-                    if (widget.baseDiary == null) {
-                      _save(context);
-                    } else {
-                      _update(context);
-                    }
-                  },
-                ),
-              ),
             ],
           ),
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            setState(() {
+              _errorMessage = '';
+            });
+
+            final errorMessageList = <String>[];
+            if (_titleEditController.text.isEmpty) {
+              errorMessageList.add('タイトルを入力してください');
+            }
+            if (_bodyEditController.text.isEmpty) {
+              errorMessageList.add('本文を入力してください');
+            }
+
+            if (errorMessageList.isNotEmpty) {
+              setState(() {
+                _errorMessage = errorMessageList.join('\n');
+              });
+              return;
+            }
+
+            if (widget.baseDiary == null) {
+              _save(context);
+            } else {
+              _update(context);
+            }
+          },
+          label: Center(
+            child: Container(
+              width: 80,
+              child: Text('保存',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold)),
+            ),
+          ),
+          icon: Icon(Icons.check, color: Colors.white),
+          backgroundColor: Colors.teal,
         ),
       ),
     );

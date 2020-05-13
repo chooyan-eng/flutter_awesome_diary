@@ -21,7 +21,7 @@ class _DiaryListState extends State<DiaryList> {
 
   Future<void> _updateList() async {
     _diaryList.clear();
-    
+
     final provider = DiaryProvider();
     await provider.open();
     final savedDiaryList = await provider.getAll();
@@ -34,9 +34,10 @@ class _DiaryListState extends State<DiaryList> {
   Future<void> _edit(Diary diary) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CreateDiary(
-        baseDiary: diary,
-      )),
+      MaterialPageRoute(
+          builder: (context) => CreateDiary(
+                baseDiary: diary,
+              )),
     );
     await _updateList();
   }
@@ -59,6 +60,7 @@ class _DiaryListState extends State<DiaryList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text('日記一覧'),
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -77,7 +79,17 @@ class _DiaryListState extends State<DiaryList> {
       ),
       body: ListView.builder(
         itemCount: _diaryList.length,
-        itemBuilder: (context, index) => InkWell(
+        itemBuilder: (context, index) => DiaryListItem(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DiaryDetail(
+                  diary: _diaryList[index],
+                ),
+              ),
+            );
+          },
           onLongPress: () {
             showDialog(
               context: context,
@@ -123,19 +135,7 @@ class _DiaryListState extends State<DiaryList> {
               ),
             );
           },
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DiaryDetail(
-                  diary: _diaryList[index],
-                ),
-              ),
-            );
-          },
-          child: DiaryListItem(
-            diary: _diaryList[index],
-          ),
+          diary: _diaryList[index],
         ),
       ),
     );

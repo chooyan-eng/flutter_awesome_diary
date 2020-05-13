@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 final String tableDiary = 'diary';
@@ -28,7 +29,7 @@ class Diary {
     var map = <String, dynamic>{
       columnTitle: title,
       columnBody: body,
-      columnImageFile: imageFile.path,
+      columnImageFile: imageFile?.path?.split('/')?.last,
       columnCreatedAt: createdAt.millisecondsSinceEpoch,
     };
     if (id != null) {
@@ -37,12 +38,12 @@ class Diary {
     return map;
   }
 
-  factory Diary.fromMap(Map<String, dynamic> map) {
+  factory Diary.fromMap(Map<String, dynamic> map, String documentDirectoryPath) {
     return Diary(
       id: map[columnId],
       title: map[columnTitle],
       body: map[columnBody],
-      imageFile: File(map[columnImageFile]),
+      imageFile: map[columnImageFile] != null ? File('$documentDirectoryPath/${map[columnImageFile]}') : null,
       createdAt: DateTime.fromMillisecondsSinceEpoch(map[columnCreatedAt]),
     );
   }
@@ -100,7 +101,7 @@ class DiaryProvider {
       whereArgs: [id],
     );
     if (maps.length > 0) {
-      return Diary.fromMap(maps.first);
+      return Diary.fromMap(maps.first, (await getApplicationDocumentsDirectory()).path);
     }
     return null;
   }
@@ -116,7 +117,8 @@ class DiaryProvider {
         columnCreatedAt,
       ],
     );
-    return maps.map<Diary>((diaryMap) => Diary.fromMap(diaryMap)).toList();
+    final documentDirectoryPath = (await getApplicationDocumentsDirectory()).path;
+    return maps.map<Diary>((diaryMap) => Diary.fromMap(diaryMap, documentDirectoryPath)).toList();
   }
 
   Future<int> delete(int id) async {
