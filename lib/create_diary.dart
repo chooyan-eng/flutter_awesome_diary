@@ -26,17 +26,18 @@ class _CreateDiaryState extends State<CreateDiary> {
   var _errorMessage = '';
 
   Future<void> _pickupImage() async {
-    final pickupImageFile =
-        await ImagePicker.pickImage(source: ImageSource.gallery);
+    final pickupImageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-    final directory = await getApplicationDocumentsDirectory();
-    final fileName = 'diary_${DateTime.now().millisecondsSinceEpoch}';
-    final file = File('${directory.path}/$fileName');
-    file.writeAsBytesSync(pickupImageFile.readAsBytesSync());
+    if (pickupImageFile != null) {
+      final directory = await getApplicationDocumentsDirectory();
+      final fileName = 'diary_${DateTime.now().millisecondsSinceEpoch}';
+      final file = File('${directory.path}/$fileName');
+      file.writeAsBytesSync(pickupImageFile.readAsBytesSync());
 
-    setState(() {
-      _imageFile = file;
-    });
+      setState(() {
+        _imageFile = file;
+      });
+    }
   }
 
   Future<void> _save(BuildContext context) async {
